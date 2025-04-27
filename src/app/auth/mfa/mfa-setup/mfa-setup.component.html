@@ -1,0 +1,119 @@
+<div class="mfa-setup-container">
+  <div class="card">
+    <div class="card-header">
+      <h2>Set Up Two-Factor Authentication</h2>
+    </div>
+    <div class="card-body">
+      <div *ngIf="!setupComplete">
+        <p class="text-muted mb-4">Enhance your account security by enabling two-factor authentication.</p>
+
+        <div class="setup-steps">
+          <!-- Step 1: Scan QR Code -->
+          <div class="step mb-5">
+            <h3 class="h5 mb-3">1. Scan QR Code</h3>
+            <p>Use an authenticator app like Google Authenticator, Authy, or Microsoft Authenticator to scan this QR code:</p>
+
+            <div class="qr-code-container text-center my-4" *ngIf="qrCodeUrl">
+              <img [src]="qrCodeUrl" alt="MFA QR Code" class="img-fluid qr-code">
+            </div>
+
+            <div *ngIf="!qrCodeUrl" class="text-center my-4">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <p class="mt-2">Loading QR code...</p>
+            </div>
+          </div>
+
+          <!-- Step 2: Manual Entry -->
+          <div class="step mb-5">
+            <h3 class="h5 mb-3">2. Can't scan the code?</h3>
+            <p>Manually enter this setup key into your authenticator app:</p>
+
+            <div class="setup-key bg-light p-3 rounded d-flex align-items-center justify-content-between mb-3">
+              <code class="me-3">{{ setupSecret }}</code>
+              <!-- <button type="button" class="btn btn-sm btn-outline-secondary" (click)="copyToClipboard(setupSecret)">
+                <i class="fas fa-copy me-1"></i> Copy
+              </button> -->
+            </div>
+          </div>
+
+          <!-- Step 3: Verification -->
+          <div class="step">
+            <h3 class="h5 mb-3">3. Enter Verification Code</h3>
+            <p>Enter the 6-digit code from your authenticator app to verify setup:</p>
+
+            <form [formGroup]="setupForm" (ngSubmit)="onSubmit()">
+              <div class="form-group mb-4">
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="verificationCode"
+                  placeholder="Enter 6-digit code"
+                  autocomplete="off"
+                  inputmode="numeric"
+                  pattern="[0-9]*"
+                  maxlength="6">
+
+                <div *ngIf="setupForm.get('verificationCode')?.invalid &&
+                          (setupForm.get('verificationCode')?.dirty || setupForm.get('verificationCode')?.touched)"
+                      class="text-danger mt-2">
+                  <small *ngIf="setupForm.get('verificationCode')?.errors?.['required']">
+                    Verification code is required.
+                  </small>
+                  <small *ngIf="setupForm.get('verificationCode')?.errors?.['minlength'] ||
+                              setupForm.get('verificationCode')?.errors?.['maxlength']">
+                    Verification code must be 6 digits.
+                  </small>
+                </div>
+              </div>
+
+              <div *ngIf="errorMessage" class="alert alert-danger mb-4">
+                {{ errorMessage }}
+              </div>
+
+              <div class="d-grid">
+                <button type="submit" [disabled]="setupForm.invalid || isSubmitting" class="btn btn-primary">
+                  <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                  Verify and Enable
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Success Screen -->
+      <div *ngIf="setupComplete" class="setup-success text-center">
+        <div class="success-icon mb-4">
+          <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
+        </div>
+        <h3 class="mb-3">Two-Factor Authentication Enabled!</h3>
+        <p class="mb-4">Your account is now protected with an additional layer of security.</p>
+
+        <div class="backup-codes-container mb-4">
+          <h4 class="h5 mb-3">Backup Codes</h4>
+          <p class="text-muted mb-3">Save these backup codes in a secure location. You can use them to access your account if you lose your authentication device.</p>
+
+          <div class="backup-codes bg-light p-3 rounded mb-3">
+            <div class="row">
+              <div class="col-6" *ngFor="let code of backupCodes">
+                <code>{{ code }}</code>
+              </div>
+            </div>
+          </div>
+
+          <!-- <button type="button" class="btn btn-sm btn-outline-secondary mb-4" (click)="copyBackupCodes()">
+            <i class="fas fa-copy me-1"></i> Copy all codes
+          </button> -->
+        </div>
+
+        <div class="d-grid">
+          <button type="button" class="btn btn-primary" routerLink="/dashboard">
+            Continue to Dashboard
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

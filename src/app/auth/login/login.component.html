@@ -1,0 +1,133 @@
+<!-- auth/login/login.component.html -->
+<div class="auth-container">
+  <div class="auth-card" [ngClass]="formAnimation">
+    <div class="auth-header">
+      <h2>{{ loginStep === 1 ? 'Connexion' : 'Vérification à deux facteurs' }}</h2>
+    </div>
+    <div class="auth-body">
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <!-- Étape 1: Email et mot de passe -->
+        <div *ngIf="loginStep === 1" @fadeInOut>
+          <div class="form-floating mb-3">
+            <input
+              type="email"
+              class="form-control auth-input"
+              id="floatingEmail"
+              formControlName="email"
+              placeholder="nom@exemple.com">
+            <label for="floatingEmail">Adresse email</label>
+            <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="text-danger mt-1">
+              <small *ngIf="loginForm.get('email')?.errors?.['required']">L'adresse email est requise</small>
+              <small *ngIf="loginForm.get('email')?.errors?.['email']">Veuillez saisir une adresse email valide</small>
+            </div>
+          </div>
+
+          <div class="form-floating mb-4">
+            <input
+              type="password"
+              class="form-control auth-input"
+              id="floatingPassword"
+              formControlName="password"
+              placeholder="Mot de passe">
+            <label for="floatingPassword">Mot de passe</label>
+            <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="text-danger mt-1">
+              <small *ngIf="loginForm.get('password')?.errors?.['required']">Le mot de passe est requis</small>
+            </div>
+            <div class="mt-2 text-end">
+              <a href="javascript:void(0)" class="secondary-link">Mot de passe oublié ?</a>
+            </div>
+          </div>
+
+          <div class="form-check mb-4">
+            <input class="form-check-input" type="checkbox" id="rememberMe" formControlName="rememberMe">
+            <label class="form-check-label" for="rememberMe">
+              Se souvenir de moi
+            </label>
+          </div>
+        </div>
+
+        <!-- Étape 2: Vérification MFA -->
+        <div *ngIf="loginStep === 2" [@fadeInOut]>
+          <div class="alert alert-info mb-4">
+            <i class="fas fa-shield-alt me-2"></i>
+            L'authentification à deux facteurs est requise pour votre compte.
+          </div>
+
+          <ng-container *ngIf="!useBackupCode">
+            <div class="form-floating mb-3">
+              <input
+                type="text"
+                class="form-control auth-input verification-code-input"
+                id="floatingMfaCode"
+                formControlName="mfaCode"
+                placeholder="Code à 6 chiffres"
+                maxlength="6"
+                digitOnly>
+              <label for="floatingMfaCode">Code de vérification</label>
+              <div *ngIf="loginForm.get('mfaCode')?.invalid && loginForm.get('mfaCode')?.touched" class="text-danger mt-1">
+                <small *ngIf="loginForm.get('mfaCode')?.errors?.['required']">Le code de vérification est requis</small>
+                <small *ngIf="loginForm.get('mfaCode')?.errors?.['minlength'] || loginForm.get('mfaCode')?.errors?.['maxlength']">
+                  Le code doit contenir 6 chiffres
+                </small>
+              </div>
+            </div>
+
+            <div class="text-muted text-center mb-3 small">
+              <p>Pour la démonstration, utilisez le code <strong>123456</strong></p>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="useBackupCode">
+            <div class="form-floating mb-3">
+              <input
+                type="text"
+                class="form-control auth-input"
+                id="floatingBackupCode"
+                formControlName="backupCode"
+                placeholder="Code de secours">
+              <label for="floatingBackupCode">Code de secours</label>
+              <div *ngIf="loginForm.get('backupCode')?.invalid && loginForm.get('backupCode')?.touched" class="text-danger mt-1">
+                <small *ngIf="loginForm.get('backupCode')?.errors?.['required']">Le code de secours est requis</small>
+              </div>
+            </div>
+
+            <div class="text-muted text-center mb-3 small">
+              <p>Pour la démonstration, utilisez le code <strong>1234-5678</strong></p>
+            </div>
+          </ng-container>
+
+          <div class="mb-3 text-center">
+            <a href="javascript:void(0)" (click)="toggleBackupCode()" class="secondary-link">
+              {{ useBackupCode ? 'Utiliser un code de vérification' : 'Utiliser un code de secours' }}
+            </a>
+          </div>
+        </div>
+
+        <!-- Message d'erreur -->
+        <div *ngIf="errorMessage" class="alert alert-danger mb-4 slide-in">
+          <i class="fas fa-exclamation-circle me-2"></i>
+          {{ errorMessage }}
+        </div>
+
+        <!-- Bouton de soumission -->
+        <div class="d-grid">
+          <button type="submit" [disabled]="loginForm.invalid || isSubmitting" class="btn auth-btn">
+            <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+            <i *ngIf="!isSubmitting" [class]="loginStep === 1 ? 'fas fa-sign-in-alt me-2' : 'fas fa-check-circle me-2'"></i>
+            {{ loginStep === 1 ? 'Se connecter' : 'Vérifier' }}
+          </button>
+        </div>
+      </form>
+
+      <div *ngIf="loginStep === 1" class="mt-4 text-center">
+        <p>Vous n'avez pas de compte ? <a href="javascript:void(0)" class="secondary-link">S'inscrire</a></p>
+      </div>
+
+      <div *ngIf="loginStep === 2" class="mt-4 text-center">
+        <a href="javascript:void(0)" (click)="loginStep = 1; formAnimation = 'slide-in'" class="secondary-link">
+          <i class="fas fa-arrow-left me-1"></i> Retour
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

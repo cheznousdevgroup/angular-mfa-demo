@@ -1,0 +1,94 @@
+<!-- auth/mfa-verification/mfa-verification.component.html -->
+<div class="auth-container">
+  <div class="auth-card slide-in">
+    <div class="auth-header">
+      <h2>Authentification à deux facteurs</h2>
+    </div>
+    <div class="auth-body">
+      <p class="mb-4">Veuillez saisir le code de vérification généré par votre application d'authentification.</p>
+
+      <form [formGroup]="verificationForm" (ngSubmit)="onSubmit()">
+        <ng-container *ngIf="!useBackupCode">
+          <div class="form-floating mb-4">
+            <input
+              type="text"
+              class="form-control auth-input verification-code-input"
+              id="verificationCode"
+              formControlName="verificationCode"
+              placeholder="Code à 6 chiffres"
+              maxlength="6"
+              digitOnly>
+            <label for="verificationCode">Code de vérification</label>
+            <div *ngIf="verificationForm.get('verificationCode')?.invalid && verificationForm.get('verificationCode')?.touched" class="text-danger mt-1">
+              <small *ngIf="verificationForm.get('verificationCode')?.errors?.['required']">Le code de vérification est requis</small>
+              <small *ngIf="verificationForm.get('verificationCode')?.errors?.['minlength'] || verificationForm.get('verificationCode')?.errors?.['maxlength']">
+                Le code doit contenir 6 chiffres
+              </small>
+            </div>
+          </div>
+
+          <div class="text-muted text-center mb-3 small">
+            <p>Pour la démonstration, utilisez le code <strong>123456</strong></p>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="useBackupCode">
+          <div class="form-floating mb-4">
+            <input
+              type="text"
+              class="form-control auth-input"
+              id="backupCode"
+              formControlName="backupCode"
+              placeholder="Code de secours">
+            <label for="backupCode">Code de secours</label>
+            <div *ngIf="verificationForm.get('backupCode')?.invalid && verificationForm.get('backupCode')?.touched" class="text-danger mt-1">
+              <small *ngIf="verificationForm.get('backupCode')?.errors?.['required']">Le code de secours est requis</small>
+            </div>
+          </div>
+
+          <div class="text-muted text-center mb-3 small">
+            <p>Pour la démonstration, utilisez le code <strong>1234-5678</strong></p>
+          </div>
+        </ng-container>
+
+        <!-- Message d'erreur -->
+        <div *ngIf="errorMessage" class="alert alert-danger mb-4 slide-in">
+          <i class="fas fa-exclamation-circle me-2"></i>
+          {{ errorMessage }}
+        </div>
+
+        <!-- Notification de succès -->
+        <div id="successNotification" class="alert alert-success mb-4 success-notification">
+          <i class="fas fa-check-circle me-2"></i>
+          Nouveau code envoyé avec succès !
+        </div>
+
+        <div class="d-grid gap-2">
+          <button type="submit" [disabled]="verificationForm.invalid || isSubmitting" class="btn auth-btn">
+            <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+            <i *ngIf="!isSubmitting" class="fas fa-check-circle me-2"></i>
+            Vérifier
+          </button>
+
+          <button type="button" class="btn btn-outline-primary" [disabled]="!canRequestNewCode || isSubmitting" (click)="requestNewCode()">
+            <span *ngIf="isSubmitting && !canRequestNewCode" class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+            <i *ngIf="!isSubmitting || canRequestNewCode" class="fas fa-sync-alt me-2"></i>
+            {{ canRequestNewCode ? 'Demander un nouveau code' : 'Nouveau code dans ' + secondsLeft + 's' }}
+          </button>
+        </div>
+      </form>
+
+      <div class="mt-4 text-center">
+        <a href="javascript:void(0)" (click)="toggleBackupCode()" class="secondary-link">
+          {{ useBackupCode ? 'Utiliser un code de vérification' : 'Utiliser un code de secours' }}
+        </a>
+      </div>
+
+      <div class="mt-4 text-center">
+        <a routerLink="/login" class="secondary-link">
+          <i class="fas fa-arrow-left me-1"></i> Retour à la connexion
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
