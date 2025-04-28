@@ -1,29 +1,7 @@
-<!-- dashboard/dashboard.component.html -->
-<div class="dashboard-container" [class.welcome-animation]="showWelcomeAnimation">
-  <div class="dashboard-header">
-    <div class="container">
-      <div class="row align-items-center">
-        <div class="col-md-6">
-          <h1>Tableau de bord</h1>
-          <p class="mb-0 text-muted">Bienvenue, {{ currentUser?.firstName || 'Utilisateur' }}</p>
-        </div>
-        <div class="col-md-6 text-md-end">
-          <div class="user-dropdown">
-            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="fas fa-user-circle me-2"></i>{{ currentUser?.firstName }} {{ currentUser?.lastName }}
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-              <li><a class="dropdown-item" href="javascript:void(0)" (click)="goToAccountSecurity()"><i class="fas fa-shield-alt me-2"></i>Sécurité du compte</a></li>
-              <li><a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-cog me-2"></i>Paramètres</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="javascript:void(0)" (click)="logout()"><i class="fas fa-sign-out-alt me-2"></i>Déconnexion</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
+<div
+  class="dashboard-container"
+  [class.welcome-animation]="showWelcomeAnimation"
+>
   <div class="dashboard-content">
     <div class="container">
       <!-- Informations sur la sécurité du compte -->
@@ -33,23 +11,45 @@
             <div class="card-body">
               <div class="row align-items-center">
                 <div class="col-md-1 text-center">
-                  <i class="fas fa-shield-alt security-icon" [class.secure]="currentUser?.mfaEnabled" [class.warning]="!currentUser?.mfaEnabled"></i>
+                  <i
+                    class="fas fa-shield-alt security-icon"
+                    [class.secure]="currentUser?.mfaEnabled"
+                    [class.warning]="!currentUser?.mfaEnabled"
+                  ></i>
                 </div>
                 <div class="col-md-8">
                   <h4>Statut de la sécurité du compte</h4>
                   <p *ngIf="currentUser?.mfaEnabled" class="mb-0">
                     <span class="badge bg-success me-2">Sécurisé</span>
-                    L'authentification à deux facteurs est activée pour votre compte.
+                    L'authentification à deux facteurs est activée pour votre
+                    compte.
                   </p>
                   <p *ngIf="!currentUser?.mfaEnabled" class="mb-0">
-                    <span class="badge bg-warning text-dark me-2">Vulnérable</span>
-                    L'authentification à deux facteurs n'est pas activée pour votre compte.
+                    <span class="badge bg-warning text-dark me-2"
+                      >Vulnérable</span
+                    >
+                    L'authentification à deux facteurs n'est pas activée pour
+                    votre compte.
                   </p>
                 </div>
                 <div class="col-md-3 text-end">
-                  <button class="btn" [class.btn-outline-success]="currentUser?.mfaEnabled" [class.btn-primary]="!currentUser?.mfaEnabled" (click)="goToAccountSecurity()">
-                    <i class="fas" [class.fa-check-circle]="currentUser?.mfaEnabled" [class.fa-shield-alt]="!currentUser?.mfaEnabled" class="me-2"></i>
-                    {{ currentUser?.mfaEnabled ? 'Gérer la 2FA' : 'Activer la 2FA' }}
+                  <button
+                    class="btn"
+                    [class.btn-outline-success]="currentUser?.mfaEnabled"
+                    [class.btn-primary]="!currentUser?.mfaEnabled"
+                    (click)="goToAccountSecurity()"
+                  >
+                    <i
+                      class="fas"
+                      [class.fa-check-circle]="currentUser?.mfaEnabled"
+                      [class.fa-shield-alt]="!currentUser?.mfaEnabled"
+                      class="me-2"
+                    ></i>
+                    {{
+                      currentUser?.mfaEnabled
+                        ? "Gérer la 2FA"
+                        : "Activer la 2FA"
+                    }}
                   </button>
                 </div>
               </div>
@@ -62,7 +62,9 @@
       <div class="row">
         <div class="col-md-8">
           <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
+            <div
+              class="card-header d-flex justify-content-between align-items-center"
+            >
               <h5 class="mb-0">Activité récente</h5>
               <button class="btn btn-sm btn-outline-primary">
                 <i class="fas fa-sync-alt me-1"></i> Actualiser
@@ -80,14 +82,25 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr *ngFor="let activity of activityLog" class="activity-row">
+                    <tr
+                      *ngFor="let activity of activityLog"
+                      class="activity-row"
+                    >
                       <td>{{ activity.timestamp }}</td>
                       <td>
-                        <span class="activity-icon" >
-                          <i class="fas"
-                             [class.fa-sign-in-alt]="activity.action === 'Connexion'"
-                             [class.fa-key]="activity.action.includes('mot de passe')"
-                             [class.fa-shield-alt]="activity.action.includes('MFA')"></i>
+                        <span class="activity-icon">
+                          <i
+                            class="fas"
+                            [class.fa-sign-in-alt]="
+                              activity.action === 'Connexion'
+                            "
+                            [class.fa-key]="
+                              activity.action.includes('mot de passe')
+                            "
+                            [class.fa-shield-alt]="
+                              activity.action.includes('MFA')
+                            "
+                          ></i>
                         </span>
                         {{ activity.action }}
                       </td>
@@ -96,7 +109,8 @@
                     </tr>
                     <tr *ngIf="activityLog.length === 0">
                       <td colspan="4" class="text-center py-4">
-                        <i class="fas fa-info-circle me-2"></i>Aucune activité récente à afficher
+                        <i class="fas fa-info-circle me-2"></i>Aucune activité
+                        récente à afficher
                       </td>
                     </tr>
                   </tbody>
@@ -113,22 +127,45 @@
             </div>
             <div class="card-body">
               <ul class="list-group list-group-flush">
-                <li class="list-group-item d-flex justify-content-between align-items-center">
+                <li
+                  class="list-group-item d-flex justify-content-between align-items-center"
+                >
                   <span><i class="fas fa-envelope me-2"></i>Email</span>
                   <span class="text-primary">{{ currentUser?.email }}</span>
                 </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
+                <li
+                  class="list-group-item d-flex justify-content-between align-items-center"
+                >
                   <span><i class="fas fa-shield-alt me-2"></i>2FA</span>
                   <span class="text-primary">
-                    <span *ngIf="currentUser?.mfaEnabled" class="badge bg-success">Activée</span>
-                    <span *ngIf="!currentUser?.mfaEnabled" class="badge bg-warning text-dark">Désactivée</span>
+                    <span
+                      *ngIf="currentUser?.mfaEnabled"
+                      class="badge bg-success"
+                      >Activée</span
+                    >
+                    <span
+                      *ngIf="!currentUser?.mfaEnabled"
+                      class="badge bg-warning text-dark"
+                      >Désactivée</span
+                    >
                   </span>
                 </li>
-                <li *ngIf="currentUser?.mfaEnabled" class="list-group-item d-flex justify-content-between align-items-center">
-                  <span><i class="fas fa-clock me-2"></i>Dernière vérification</span>
-                  <span class="text-primary">{{ currentUser?.lastMfaVerification }}</span>
+                <li
+                  *ngIf="currentUser?.mfaEnabled"
+                  class="list-group-item d-flex justify-content-between align-items-center"
+                >
+                  <span
+                    ><i class="fas fa-clock me-2"></i>Dernière
+                    vérification</span
+                  >
+                  <span class="text-primary">{{
+                    currentUser?.lastMfaVerification
+                  }}</span>
                 </li>
-                <li *ngIf="currentUser?.backupCodes" class="list-group-item d-flex justify-content-between align-items-center">
+                <li
+                  *ngIf="currentUser?.backupCodes"
+                  class="list-group-item d-flex justify-content-between align-items-center"
+                >
                   <span><i class="fas fa-key me-2"></i>Codes de secours</span>
                   <span class="text-primary">
                     <!-- {{ currentUser?.backupCodes?.filter(code => !code.used).length }} / {{ currentUser?.backupCodes?.length }} restants -->
@@ -137,8 +174,12 @@
               </ul>
 
               <div class="mt-3">
-                <button class="btn btn-outline-primary w-100" (click)="goToAccountSecurity()">
-                  <i class="fas fa-cog me-2"></i>Gérer les paramètres de sécurité
+                <button
+                  class="btn btn-outline-primary w-100"
+                  (click)="goToAccountSecurity()"
+                >
+                  <i class="fas fa-cog me-2"></i>Gérer les paramètres de
+                  sécurité
                 </button>
               </div>
             </div>
@@ -147,7 +188,9 @@
           <!-- Conseils de sécurité -->
           <div class="card mt-4">
             <div class="card-header bg-light">
-              <h5 class="mb-0"><i class="fas fa-lightbulb me-2"></i>Conseils de sécurité</h5>
+              <h5 class="mb-0">
+                <i class="fas fa-lightbulb me-2"></i>Conseils de sécurité
+              </h5>
             </div>
             <div class="card-body">
               <div class="security-tip">
@@ -155,7 +198,8 @@
                   <strong>Utilisez un gestionnaire de mots de passe</strong>
                 </p>
                 <p class="text-muted small">
-                  Les gestionnaires de mots de passe vous aident à créer et stocker des mots de passe uniques et complexes.
+                  Les gestionnaires de mots de passe vous aident à créer et
+                  stocker des mots de passe uniques et complexes.
                 </p>
               </div>
               <div class="security-tip">
@@ -163,7 +207,8 @@
                   <strong>Activez l'authentification à deux facteurs</strong>
                 </p>
                 <p class="text-muted small">
-                  L'authentification à deux facteurs ajoute une couche de sécurité supplémentaire à votre compte.
+                  L'authentification à deux facteurs ajoute une couche de
+                  sécurité supplémentaire à votre compte.
                 </p>
               </div>
             </div>

@@ -1,4 +1,3 @@
-// auth/login/login.component.ts
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -14,7 +13,7 @@ import { trigger, transition, style, animate } from '@angular/animations';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
   animations: [
-    trigger('fadeInOut', [ 
+    trigger('fadeInOut', [
       transition(':enter', [
         style({ opacity: 0 }),
         animate('300ms', style({ opacity: 1 }))
@@ -76,6 +75,7 @@ export class LoginComponent implements OnInit {
 
       this.authService.login(loginRequest).subscribe({
         next: (response) => {
+          console.log('Login response:', response);
           this.isSubmitting = false;
 
           if (response.mfaRequired) {

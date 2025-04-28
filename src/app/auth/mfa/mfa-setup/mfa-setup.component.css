@@ -1,0 +1,269 @@
+.mfa-setup-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background-color: #f5f7ff;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 550px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.auth-header {
+  background-color: var(--primary-color);
+  padding: 1.5rem;
+  text-align: center;
+  color: white;
+
+  h2 {
+    margin: 0;
+    font-weight: 600;
+  }
+}
+
+.auth-body {
+  padding: 2rem;
+}
+
+/* // Styles pour les onglets */
+.tabs {
+  display: flex;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.tab {
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  font-weight: 500;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: rgba(67, 97, 238, 0.05);
+  }
+
+  &.active {
+    border-bottom-color: var(--primary-color);
+    color: var(--primary-color);
+  }
+}
+
+/* // Styles pour les étapes */
+.step-container {
+  counter-reset: step;
+}
+
+.step {
+  position: relative;
+  margin-bottom: 2.5rem;
+  padding-left: 2.5rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &:before {
+    counter-increment: step;
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1.75rem;
+    height: 1.75rem;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+  }
+
+  h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+  }
+}
+
+/* // Styles pour le code QR */
+.qr-code-container {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 1rem;
+  margin: 1.5rem auto;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* // Styles pour la clé de configuration */
+.setup-key {
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 0.75rem;
+  font-family: monospace;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 1rem 0;
+
+  code {
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+  }
+}
+
+/* // Styles pour les champs de saisie */
+.auth-input {
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ced4da;
+  transition: all 0.3s ease;
+
+  &:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
+    transform: translateY(-2px);
+  }
+}
+
+.verification-code-input {
+  letter-spacing: 0.5em;
+  text-align: center;
+  font-family: monospace;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+/* // Styles pour le bouton d'action */
+.auth-btn {
+  background-color: var(--primary-color);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  padding: 0.85rem 1.5rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+
+  &:hover:not(:disabled) {
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(67, 97, 238, 0.3);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    background-color: #a9b2e0;
+    cursor: not-allowed;
+  }
+}
+
+/* // Styles pour l'écran de succès */
+.success-container {
+  text-align: center;
+  padding: 1rem;
+}
+
+.success-icon {
+  color: #10b981;
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  animation: scaleIn 0.5s ease-out;
+}
+
+/* // Styles pour les codes de secours */
+.backup-codes-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin: 1.5rem 0;
+}
+
+.backup-code {
+  font-family: monospace;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 0.75rem;
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+/* // Notification SMS */
+#sms-confirmation {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  display: none;
+
+  &.show {
+    opacity: 1;
+    transform: translateY(0);
+    display: block;
+  }
+}
+
+/* // Animations */
+.slide-in {
+  animation: slideIn 0.4s ease-out;
+}
+
+@keyframes slideIn {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* // Responsive adjustments */
+@media (max-width: 576px) {
+  .tabs {
+    flex-direction: column;
+    border-bottom: none;
+  }
+
+  .tab {
+    border-bottom: none;
+    border-left: 3px solid transparent;
+
+    &.active {
+      border-bottom: none;
+      border-left-color: var(--primary-color);
+      background-color: rgba(67, 97, 238, 0.05);
+    }
+  }
+
+  .backup-codes-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-body {
+    padding: 1.5rem;
+  }
+}

@@ -1,11 +1,16 @@
-// dashboard/dashboard.component.ts
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../auth/services/auth.service';
 import { User } from '../../auth/models/user.model';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-dashboard',
+  standalone: true, // Assurez-vous que le composant est bien en mode standalone
+  imports: [
+    CommonModule, // Ajoutez CommonModule ici
+    RouterModule // Autres modules que vous pourriez utiliser
+  ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
@@ -23,6 +28,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     // Vérifier si l'utilisateur est connecté
     this.authService.currentUser.subscribe(user => {
+      console.log('Dashboard received user:', user);
       this.currentUser = user;
       this.isLoading = false;
 
