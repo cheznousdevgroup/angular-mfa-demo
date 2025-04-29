@@ -2,8 +2,8 @@
 @import '@fortawesome/fontawesome-free/css/all.min.css';
 
 :root {
-  --primary-color: #4361ee;
-  --secondary-color: #3f37c9;
+  --primary-color: #b4482b;
+  --secondary-color: #b4482b;
   --success-color: #4cc9f0;
   --warning-color: #f72585;
   --light-color: #f8f9fa;
@@ -35,7 +35,7 @@ body {
 
 .auth-header {
   background-color: var(--primary-color);
-  padding: 1.5rem;
+  padding: 0.2rem;
   text-align: center;
   color: white;
 }
@@ -46,7 +46,7 @@ body {
 }
 
 .auth-body {
-  padding: 2rem;
+  padding: 1rem;
 }
 
 .form-floating {
@@ -55,7 +55,7 @@ body {
 
 .auth-input {
   border-radius: 8px;
-  padding: 0.75rem 1rem;
+  padding: 0.5rem 1rem;
   font-size: 1rem;
   border: 1px solid #ced4da;
 }
@@ -77,7 +77,7 @@ body {
   border: none;
   border-radius: 8px;
   color: white;
-  padding: 0.75rem 1.5rem;
+  padding: 0.5rem 1rem;
   font-weight: 600;
   transition: all 0.3s ease;
 }
