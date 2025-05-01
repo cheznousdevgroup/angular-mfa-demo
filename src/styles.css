@@ -2,18 +2,34 @@
 @import '@fortawesome/fontawesome-free/css/all.min.css';
 
 :root {
-  --primary-color: #b4482b;
-  --secondary-color: #b4482b;
-  --success-color: #4cc9f0;
-  --warning-color: #f72585;
-  --light-color: #f8f9fa;
-  --dark-color: #212529;
+  /* Couleurs Principales OLEA */
+  --primary-color: #B7482B;      /* Rouge/Terracotta - CMYN:15/86/97/5, RGB:183/72/43, Pantone:1675 C */
+  --secondary-color: #F8AF3C;    /* Jaune/Orange - CMYN:0/40/93/0, RGB:248/175/60, Pantone:1365 C */
+
+  /* Couleurs Secondaires OLEA */
+  --gray-color: #666666;         /* Gris - CMYN:0/0/0/60, RGB:102/102/102, Pantone:425 C */
+  --light-gray-color: #B8B8B8;   /* Gris Clair - CMYN:0/0/0/28, RGB:184/184/184, Pantone:Cool Gray 3 C */
+  --dark-color: #000000;         /* Noir - CMYN:0/0/0/100, RGB:0/0/0 */
+  --brown-color: #936037;        /* Marron - CMYN:28/62/85/24, RGB:147/96/55, Pantone:7574 C */
+
+  /* Couleurs Complémentaires OLEA */
+  --dark-brown-color: #432918;   /* Marron Foncé - CMYN:44/73/82/69, RGB:67/41/24, Pantone:4625 C */
+  --beige-color: #CBBBA0;        /* Beige - CMYN:20/24/40/4, RGB:203/187/160, Pantone:468 C */
+  --teal-color: #5FB7B1;         /* Turquoise - CMYN:71/0/38/0, RGB:95/183/177, Pantone:7716 C */
+  --pink-color: #C99FB5;         /* Rose/Violet - CMYN:19/46/13/0, RGB:201/159/181, Pantone:686 C */
+
+  /* Couleurs du système d'origine avec adaptation OLEA */
+  --success-color: #5FB7B1;      /* Utilisation du turquoise OLEA au lieu de #4cc9f0 */
+  --warning-color: #F8AF3C;      /* Utilisation du jaune OLEA au lieu de #f72585 */
+  --light-color: #f8f9fa;        /* Conservé */
 }
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f5f7ff;
-  color: #333;
+  --tw-bg-opacity: 1;
+  background-color: rgb(242 242 244 / var(--tw-bg-opacity));
+  color: var(--dark-color);
+  font-size: 11px;               /* Taille de police standard à 11px comme demandé */
 }
 
 .auth-container {
@@ -27,10 +43,12 @@ body {
 .auth-card {
   width: 100%;
   max-width: 450px;
-  background-color: white;
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
   border-radius: 12px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  border: 2px solid var(--primary-color);
 }
 
 .auth-header {
@@ -43,33 +61,39 @@ body {
 .auth-header h2 {
   margin: 0;
   font-weight: 600;
+  font-size: 16px;               /* Taille ajustée pour le titre */
 }
 
 .auth-body {
   padding: 1rem;
+  background-color: white;
 }
 
 .form-floating {
   margin-bottom: 1.25rem;
 }
 
+.form-floating label {
+  font-size: 11px;               /* Taille de police à 11px */
+}
+
 .auth-input {
   border-radius: 8px;
   padding: 0.5rem 1rem;
-  font-size: 1rem;
-  border: 1px solid #ced4da;
+  font-size: 11px;               /* Taille de police à 11px */
+  border: 1px solid var(--light-gray-color);
 }
 
 .auth-input:focus {
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
+  box-shadow: 0 0 0 0.25rem rgba(183, 72, 43, 0.25); /* Couleur primaire avec opacité */
 }
 
 .verification-code-input {
   letter-spacing: 0.5em;
   text-align: center;
   font-family: monospace;
-  font-size: 1.2rem;
+  font-size: 14px;               /* Un peu plus grand pour meilleure lisibilité */
 }
 
 .auth-btn {
@@ -79,11 +103,12 @@ body {
   color: white;
   padding: 0.5rem 1rem;
   font-weight: 600;
+  font-size: 11px;               /* Taille de police à 11px */
   transition: all 0.3s ease;
 }
 
 .auth-btn:hover {
-  background-color: var(--secondary-color);
+  background-color: #a3402a;     /* Version plus foncée de la couleur primaire */
   transform: translateY(-2px);
 }
 
@@ -91,17 +116,27 @@ body {
   transform: translateY(0);
 }
 
+.auth-btn-secondary {
+  background-color: var(--secondary-color);
+  color: #432918;                /* Utilisation du marron foncé pour contraste */
+}
+
+.auth-btn-secondary:hover {
+  background-color: #e09f2e;     /* Version plus foncée de la couleur secondaire */
+}
+
 .divider {
   display: flex;
   align-items: center;
   margin: 1.5rem 0;
-  color: #6c757d;
+  color: var(--gray-color);
+  font-size: 11px;               /* Taille de police à 11px */
 }
 
 .divider::before, .divider::after {
   content: "";
   flex: 1;
-  border-bottom: 1px solid #dee2e6;
+  border-bottom: 1px solid var(--light-gray-color);
 }
 
 .divider span {
@@ -112,17 +147,18 @@ body {
   color: var(--primary-color);
   text-decoration: none;
   font-weight: 500;
+  font-size: 11px;               /* Taille de police à 11px */
   transition: color 0.3s ease;
 }
 
 .secondary-link:hover {
-  color: var(--secondary-color);
+  color: #a3402a;                /* Version plus foncée de la couleur primaire */
   text-decoration: underline;
 }
 
 .qr-code-container {
   background-color: white;
-  border: 1px solid #ddd;
+  border: 1px solid var(--light-gray-color);
   border-radius: 12px;
   padding: 1rem;
   margin: 1.5rem auto;
@@ -134,11 +170,12 @@ body {
 }
 
 .setup-key {
-  background-color: #f8f9fa;
-  border: 1px solid #ddd;
+  background-color: var(--light-color);
+  border: 1px solid var(--light-gray-color);
   border-radius: 8px;
   padding: 0.75rem;
   font-family: monospace;
+  font-size: 11px;               /* Taille de police à 11px */
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -154,6 +191,7 @@ body {
   position: relative;
   margin-bottom: 2rem;
   padding-left: 2.5rem;
+  font-size: 11px;               /* Taille de police à 11px */
 }
 
 .step:before {
@@ -174,9 +212,10 @@ body {
 }
 
 .step h3 {
-  font-size: 1.1rem;
+  font-size: 13px;               /* Un peu plus grand pour les titres */
   font-weight: 600;
   margin-bottom: 0.75rem;
+  color: var(--primary-color);
 }
 
 .backup-codes-grid {
@@ -188,11 +227,12 @@ body {
 
 .backup-code {
   font-family: monospace;
-  background-color: #f8f9fa;
-  border: 1px solid #ddd;
+  background-color: var(--light-color);
+  border: 1px solid var(--light-gray-color);
   border-radius: 6px;
   padding: 0.5rem;
   text-align: center;
+  font-size: 11px;               /* Taille de police à 11px */
 }
 
 .success-container {
@@ -201,7 +241,7 @@ body {
 }
 
 .success-icon {
-  color: #10b981;
+  color: var(--teal-color);      /* Utilisation du turquoise OLEA au lieu de #10b981 */
   font-size: 4rem;
   margin-bottom: 1.5rem;
 }
@@ -209,14 +249,15 @@ body {
 .tabs {
   display: flex;
   margin-bottom: 2rem;
-  border-bottom: 1px solid #dee2e6;
+  border-bottom: 1px solid var(--light-gray-color);
 }
 
 .tab {
   padding: 0.75rem 1.5rem;
   cursor: pointer;
-  border-bottom: 3px solid transparent;
+  border-bottom: a2px solid transparent;
   font-weight: 500;
+  font-size: 11px;               /* Taille de police à 11px */
 }
 
 .tab.active {
@@ -224,7 +265,44 @@ body {
   color: var(--primary-color);
 }
 
-/* // Animations */
+/* Nouvelles classes pour les autres couleurs OLEA */
+.olea-dark-brown {
+  color: var(--dark-brown-color);
+}
+
+.olea-beige {
+  color: var(--beige-color);
+}
+
+.olea-teal {
+  color: var(--teal-color);
+}
+
+.olea-pink {
+  color: var(--pink-color);
+}
+
+.bg-olea-dark-brown {
+  background-color: var(--dark-brown-color);
+  color: white;
+}
+
+.bg-olea-beige {
+  background-color: var(--beige-color);
+  color: var(--dark-brown-color);
+}
+
+.bg-olea-teal {
+  background-color: var(--teal-color);
+  color: white;
+}
+
+.bg-olea-pink {
+  background-color: var(--pink-color);
+  color: var(--dark-brown-color);
+}
+
+/* Animations */
 .fade-in {
   animation: fadeIn 0.5s ease-in;
 }
@@ -243,7 +321,7 @@ body {
   to { transform: translateY(0); opacity: 1; }
 }
 
-/* // Responsive adjustments */
+/* Responsive adjustments */
 @media (max-width: 576px) {
   .auth-body {
     padding: 1.5rem;

@@ -1,3 +1,4 @@
+<!-- auth/login/login.component.html -->
 <div class="auth-container">
   <div class="auth-card" [ngClass]="formAnimation">
     <div class="auth-header">
@@ -45,30 +46,85 @@
           </div>
         </div>
 
-        <!-- Étape 2: Vérification MFA -->
-        <div *ngIf="loginStep === 2" [@fadeInOut]>
-          <div class="alert alert-info mb-4">
+        <!-- Étape 2: Vérification MFA Améliorée -->
+        <div *ngIf="loginStep === 2" @fadeInOut>
+          <div class="alert alert-info mb-4 olea-info-alert">
             <i class="fas fa-shield-alt me-2"></i>
             L'authentification à deux facteurs est requise pour votre compte.
           </div>
 
           <ng-container *ngIf="!useBackupCode">
-            <div class="form-floating mb-3">
+            <div class="verification-title text-center mb-3">
+              <p>Veuillez entrer le code à 6 chiffres de votre application d'authentification</p>
+            </div>
+
+            <!-- Nouveau champ de vérification avec cases individuelles -->
+            <div class="verification-code-container" [class.shake-animation]="errorMessage">
               <input
                 type="text"
-                class="form-control auth-input verification-code-input"
-                id="floatingMfaCode"
-                formControlName="mfaCode"
-                placeholder="Code à 6 chiffres"
-                maxlength="6"
-                digitOnly>
-              <label for="floatingMfaCode">Code de vérification</label>
-              <div *ngIf="loginForm.get('mfaCode')?.invalid && loginForm.get('mfaCode')?.touched" class="text-danger mt-1">
-                <small *ngIf="loginForm.get('mfaCode')?.errors?.['required']">Le code de vérification est requis</small>
-                <small *ngIf="loginForm.get('mfaCode')?.errors?.['minlength'] || loginForm.get('mfaCode')?.errors?.['maxlength']">
-                  Le code doit contenir 6 chiffres
-                </small>
-              </div>
+                class="digit-input"
+                #codeInput1
+                maxlength="1"
+                pattern="[0-9]"
+                inputmode="numeric"
+                (input)="onDigitInput($event, 0, 1)"
+                (keydown)="onDigitKeyDown($event, 0, -1)">
+              <input
+                type="text"
+                class="digit-input"
+                #codeInput2
+                maxlength="1"
+                pattern="[0-9]"
+                inputmode="numeric"
+                (input)="onDigitInput($event, 1, 2)"
+                (keydown)="onDigitKeyDown($event, 1, 0)">
+              <input
+                type="text"
+                class="digit-input"
+                #codeInput3
+                maxlength="1"
+                pattern="[0-9]"
+                inputmode="numeric"
+                (input)="onDigitInput($event, 2, 3)"
+                (keydown)="onDigitKeyDown($event, 2, 1)">
+              <input
+                type="text"
+                class="digit-input"
+                #codeInput4
+                maxlength="1"
+                pattern="[0-9]"
+                inputmode="numeric"
+                (input)="onDigitInput($event, 3, 4)"
+                (keydown)="onDigitKeyDown($event, 3, 2)">
+              <input
+                type="text"
+                class="digit-input"
+                #codeInput5
+                maxlength="1"
+                pattern="[0-9]"
+                inputmode="numeric"
+                (input)="onDigitInput($event, 4, 5)"
+                (keydown)="onDigitKeyDown($event, 4, 3)">
+              <input
+                type="text"
+                class="digit-input"
+                #codeInput6
+                maxlength="1"
+                pattern="[0-9]"
+                inputmode="numeric"
+                (input)="onDigitInput($event, 5, -1)"
+                (keydown)="onDigitKeyDown($event, 5, 4)"
+                (paste)="onCodePaste($event)">
+            </div>
+
+            <!-- Champ caché pour stocker la valeur dans le formulaire -->
+            <input type="hidden" formControlName="mfaCode">
+
+            <div *ngIf="loginForm.get('mfaCode')?.invalid && loginForm.get('mfaCode')?.touched" class="text-danger mt-1 text-center">
+              <small *ngIf="loginForm.get('mfaCode')?.errors?.['required']">Le code de vérification est requis</small>
+              <small *ngIf="loginForm.get('mfaCode')?.errors?.['minlength'] || loginForm.get('mfaCode')?.errors?.['maxlength']">
+                Le code doit contenir 6 chiffres
+              </small>
             </div>
 
             <div class="text-muted text-center mb-3 small">
@@ -95,17 +151,46 @@
             </div>
           </ng-container>
 
-          <div class="mb-3 text-center">
+          <!-- Messages de notification avec animations -->
+          <div class="notification-area">
+            <!-- Message de succès pour le renvoi de code -->
+            <div *ngIf="resendSuccessMessage" class="alert alert-success mb-3 fade-in notification">
+              <div class="notification-content">
+                <i class="fas fa-check-circle me-2"></i>
+                {{ resendSuccessMessage }}
+              </div>
+              <!-- Barre de progression pour le timing -->
+              <div class="notification-progress-bar"></div>
+            </div>
+
+            <!-- Message d'erreur -->
+            <div *ngIf="errorMessage" class="alert alert-danger mb-3 fade-in notification">
+              <div class="notification-content">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                {{ errorMessage }}
+              </div>
+              <!-- Barre de progression pour le timing -->
+              <div class="notification-progress-bar"></div>
+            </div>
+          </div>
+
+          <!-- Actions secondaires -->
+          <div class="secondary-actions mb-3">
             <a href="javascript:void(0)" (click)="toggleBackupCode()" class="secondary-link">
               {{ useBackupCode ? 'Utiliser un code de vérification' : 'Utiliser un code de secours' }}
             </a>
-          </div>
-        </div>
 
-        <!-- Message d'erreur -->
-        <div *ngIf="errorMessage" class="alert alert-danger mb-4 slide-in">
-          <i class="fas fa-exclamation-circle me-2"></i>
-          {{ errorMessage }}
+            <!-- Bouton pour demander un nouveau code -->
+            <a href="javascript:void(0)"
+               (click)="requestNewCode()"
+               class="secondary-link"
+               [class.disabled]="!canRequestNewCode || isResendingCode">
+              <i class="fas fa-sync-alt me-1" [class.fa-spin]="isResendingCode"></i>
+              <span *ngIf="canRequestNewCode && !isResendingCode">Envoyer un nouveau code</span>
+              <span *ngIf="!canRequestNewCode && !isResendingCode">Nouveau code dans {{ secondsLeft }}s</span>
+              <span *ngIf="isResendingCode">Envoi en cours...</span>
+            </a>
+          </div>
         </div>
 
         <!-- Bouton de soumission -->

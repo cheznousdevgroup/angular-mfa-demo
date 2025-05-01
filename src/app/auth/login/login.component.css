@@ -1,3 +1,22 @@
+/* // Variables de couleurs OLEA */
+:root {
+  /* // Couleurs Principales OLEA */
+  --primary-color: #B7482B;
+  --secondary-color: #F8AF3C;
+
+  /* // Couleurs Secondaires OLEA */
+  --gray-color: #666666;
+  --light-gray-color: #B8B8B8;
+  --dark-color: #000000;
+  --brown-color: #936037;
+  /* // Couleurs Complémentaires OLEA */
+  --dark-brown-color: #432918;
+  --beige-color: #CBBBA0;
+  --teal-color: #5FB7B1;
+  --pink-color: #C99FB5;
+}
+
+/* // Animation de secousse pour les erreurs */
 @keyframes shake {
   0%, 100% { transform: translateX(0); }
   10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
@@ -8,120 +27,150 @@
   animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
 }
 
-/* Animations pour les transitions entre étapes */
-.fade-enter {
-  opacity: 0;
+.shake-animation {
+  animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
 }
 
-.fade-enter-active {
-  opacity: 1;
-  transition: opacity 300ms;
-}
-
-.fade-exit {
-  opacity: 1;
-}
-
-.fade-exit-active {
-  opacity: 0;
-  transition: opacity 300ms;
-}
-
-/* Styles pour les éléments de vérification */
-.verification-input-container {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 1.5rem;
-}
-
-.verification-input {
-  width: 40px;
-  height: 48px;
-  margin: 0 5px;
-  font-size: 1.5rem;
+/* // Style pour le code de vérification à 6 chiffres */
+.verification-title {
   text-align: center;
-  border: 2px solid #ced4da;
-  border-radius: 8px;
-  transition: all 0.3s ease;
+  margin-bottom: 15px;
+  color: var(--gray-color);
+  font-size: 11px;
 }
 
-.verification-input:focus {
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
-}
-
-/* Pulsation pour indiquer où saisir */
-@keyframes pulse {
-  0% { box-shadow: 0 0 0 0 rgba(67, 97, 238, 0.4); }
-  70% { box-shadow: 0 0 0 10px rgba(67, 97, 238, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(67, 97, 238, 0); }
-}
-
-.pulse {
-  animation: pulse 1.5s infinite;
-}
-
-/* Animations pour les éléments interactifs */
-.auth-btn {
-  position: relative;
-  overflow: hidden;
-}
-
-.auth-btn::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 5px;
-  height: 5px;
-  background: rgba(255, 255, 255, 0.5);
-  opacity: 0;
-  border-radius: 100%;
-  transform: scale(1, 1) translate(-50%);
-  transform-origin: 50% 50%;
-}
-
-.auth-btn:focus:not(:active)::after {
-  animation: ripple 1s ease-out;
-}
-
-@keyframes ripple {
-  0% {
-    transform: scale(0, 0);
-    opacity: 0.5;
-  }
-  20% {
-    transform: scale(25, 25);
-    opacity: 0.3;
-  }
-  100% {
-    opacity: 0;
-    transform: scale(40, 40);
-  }
-}
-
-/* Badge de sécurité */
-.security-badge {
-  position: absolute;
-  top: -10px;
-  right: -10px;
-  background-color: var(--primary-color);
-  color: white;
-  border-radius: 50%;
-  width: 30px;
-  height: 30px;
+.verification-code-container {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.8rem;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  justify-content: space-between;
+  margin-bottom: 20px;
 }
 
-/* Adaptation pour les écrans plus petits */
+.digit-input {
+  width: 45px;
+  height: 45px;
+  font-size: 18px;
+  text-align: center;
+  border: 1px solid var(--light-gray-color);
+  border-radius: 8px;
+  padding: 0;
+
+  &:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(183, 72, 43, 0.25);
+    outline: none;
+  }
+
+  &.filled {
+    border-color: var(--primary-color);
+    background-color: rgba(183, 72, 43, 0.05);
+  }
+}
+
+/* // Réecritures de styles pour les couleurs OLEA */
+.auth-header {
+  background-color: var(--primary-color);
+}
+
+.auth-btn {
+  background-color: var(--primary-color);
+
+  &:hover:not(:disabled) {
+    background-color: darken(#b7482b, 10%);
+  }
+}
+
+.secondary-link {
+  color: var(--primary-color);
+
+  &:hover {
+    color: darken(#b7482b, 10%);
+    text-decoration: underline;
+  }
+
+  &.disabled {
+    color: var(--light-gray-color);
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}
+
+/* // Actions secondaires (liens en bas) */
+.secondary-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  font-size: 11px;
+}
+
+/* // Alerte d'info personnalisée */
+.olea-info-alert {
+  background-color: rgba(95, 183, 177, 0.1);
+  border-left: 3px solid var(--teal-color);
+  color: darken(#5FB7B1, 25%);
+  padding: 10px 15px;
+  font-size: 11px;
+  border-radius: 4px;
+}
+
+/* // Alerte de danger personnalisée */
+.alert-danger {
+  background-color: rgba(183, 72, 43, 0.1);
+  border-left: 3px solid var(--primary-color);
+  color: var(--primary-color);
+  border-radius: 6px;
+  font-size: 11px;
+}
+
+/* // Alerte de succès personnalisée */
+.alert-success {
+  background-color: rgba(95, 183, 177, 0.1);
+  border-left: 3px solid var(--teal-color);
+  color: darken(#5FB7B1, 25%);
+  border-radius: 6px;
+  font-size: 11px;
+}
+
+/* // Animations */
+.fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+.slide-in {
+  animation: slideIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* // Rotation pour l'icône de synchronisation */
+.fa-spin {
+  animation: spin 1s infinite linear;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* // Responsive */
 @media (max-width: 576px) {
-  .verification-input {
-    width: 35px;
-    height: 42px;
-    font-size: 1.2rem;
+  .digit-input {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+
+  .secondary-actions {
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
   }
 }

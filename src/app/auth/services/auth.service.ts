@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { delay, tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { delay, map } from 'rxjs/operators';
 import { User, LoginRequest, LoginResponse, BackupCode } from '../models/user.model';
 import { Router } from '@angular/router';
 
@@ -96,88 +96,94 @@ export class AuthService {
     // Trouver l'utilisateur
     const user = this.mockUsers.find(u => u.email === loginRequest.email);
 
-    // Si utilisateur non trouvé
-    if (!user) {
-      return of({ success: false, message: 'Email ou mot de passe invalide' });
-    }
-
-    // Si mot de passe incorrect
-    if (user.password !== loginRequest.password) {
-      return of({ success: false, message: 'Email ou mot de passe invalide' });
-    }
-
-    // Si MFA est activé
-    if (user.mfaEnabled) {
-      // Si un code MFA est fourni, le vérifier
-      if (loginRequest.mfaCode) {
-        // Simuler la vérification du code (123456 est valide pour la démo)
-        if (loginRequest.mfaCode !== '123456') {
-          return of({ success: false, message: 'Code de vérification invalide' });
+    // Simuler une latence réseau
+    return of({} as LoginResponse).pipe(
+      delay(1000),
+      map(() => {
+        // Si utilisateur non trouvé
+        if (!user) {
+          throw new Error('Email ou mot de passe invalide');
         }
 
-        // Connexion réussie avec MFA
+        // Si mot de passe incorrect
+        if (user.password !== loginRequest.password) {
+          throw new Error('Email ou mot de passe invalide');
+        }
+
+        // Si MFA est activé
+        if (user.mfaEnabled) {
+          // Si un code MFA est fourni, le vérifier
+          if (loginRequest.mfaCode) {
+            // Simuler la vérification du code (123456 est valide pour la démo)
+            if (loginRequest.mfaCode !== '123456') {
+              throw new Error('Code de vérification invalide');
+            }
+
+            // Connexion réussie avec MFA
+            this.completeLogin(user);
+            return {
+              success: true,
+              userId: user.id,
+              token: 'mock-jwt-token'
+            };
+          } else if (loginRequest.backupCode) {
+            // Vérifier le code de secours
+            const backupCode = user.backupCodes?.find(code =>
+              !code.used && code.code === loginRequest.backupCode
+            );
+
+            if (!backupCode) {
+              throw new Error('Code de secours invalide ou déjà utilisé');
+            }
+
+            // Marquer le code comme utilisé
+            backupCode.used = true;
+            backupCode.usedAt = new Date();
+
+            // Connexion réussie avec code de secours
+            this.completeLogin(user);
+            return {
+              success: true,
+              userId: user.id,
+              token: 'mock-jwt-token'
+            };
+          }
+
+          // MFA requis mais pas encore fourni
+          this.temporaryUserId = user.id;
+          return {
+            success: false,
+            mfaRequired: true,
+            userId: user.id,
+            message: 'Vérification à deux facteurs requise'
+          };
+        }
+
+        // Connexion réussie sans MFA
         this.completeLogin(user);
-        return of({
+        return {
           success: true,
           userId: user.id,
           token: 'mock-jwt-token'
-        }).pipe(delay(1000)); // Simuler latence réseau ici
-      } else if (loginRequest.backupCode) {
-        // Vérifier le code de secours
-        const backupCode = user.backupCodes?.find(code =>
-          !code.used && code.code === loginRequest.backupCode
-        );
-
-        if (!backupCode) {
-          return of({ success: false, message: 'Code de secours invalide ou déjà utilisé' });
-        }
-
-        // Marquer le code comme utilisé
-        backupCode.used = true;
-        backupCode.usedAt = new Date();
-
-        // Connexion réussie avec code de secours
-        this.completeLogin(user);
-        return of({
-          success: true,
-          userId: user.id,
-          token: 'mock-jwt-token'
-        }).pipe(delay(1000));
-      }
-
-      // MFA requis mais pas encore fourni
-      this.temporaryUserId = user.id;
-      return of({
-        success: false,
-        mfaRequired: true,
-        userId: user.id,
-        message: 'Vérification à deux facteurs requise'
-      }).pipe(delay(1000));
-    }
-
-    // Connexion réussie sans MFA
-    this.completeLogin(user);
-    return of({
-      success: true,
-      userId: user.id,
-      token: 'mock-jwt-token'
-    }).pipe(delay(1000));
+        };
+      })
+    );
   }
 
   verifyMfa(code: string, isBackupCode: boolean = false): Observable<LoginResponse> {
     if (!this.temporaryUserId) {
-      return of({ success: false, message: 'Session expirée' });
+      return throwError(() => new Error('Session expirée'));
     }
 
     const user = this.mockUsers.find(u => u.id === this.temporaryUserId);
     if (!user) {
-      return of({ success: false, message: 'Utilisateur non trouvé' });
+      return throwError(() => new Error('Utilisateur non trouvé'));
     }
 
     // Simuler une latence réseau
     return of({} as LoginResponse).pipe(
       delay(800),
-      tap(() => {
+      map(() => {
         if (isBackupCode) {
           // Vérifier le code de secours
           const backupCode = user.backupCodes?.find(backupCode =>
@@ -246,7 +252,7 @@ export class AuthService {
     // Simuler une latence réseau
     return of(true).pipe(
       delay(1000),
-      tap(() => {
+      map(() => {
         // Trouver l'utilisateur
         const userIndex = this.mockUsers.findIndex(u => u.id === user.id);
         if (userIndex === -1) {
@@ -295,6 +301,8 @@ export class AuthService {
 
         localStorage.setItem('currentUser', JSON.stringify(userCopy));
         this.currentUserSubject.next(userCopy);
+
+        return true;
       })
     );
   }
@@ -316,7 +324,7 @@ export class AuthService {
     // Simuler une latence réseau
     return of([]).pipe(
       delay(800),
-      tap(() => {
+      map(() => {
         // Trouver l'utilisateur
         const userIndex = this.mockUsers.findIndex(u => u.id === userId);
         if (userIndex === -1) {
