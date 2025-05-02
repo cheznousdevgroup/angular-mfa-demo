@@ -203,9 +203,9 @@
         </div>
       </form>
 
-      <div *ngIf="loginStep === 1" class="mt-4 text-center">
+      <!-- <div *ngIf="loginStep === 1" class="mt-4 text-center">
         <p>Vous n'avez pas de compte ? <a href="javascript:void(0)" class="secondary-link">S'inscrire</a></p>
-      </div>
+      </div> -->
 
       <div *ngIf="loginStep === 2" class="mt-4 text-center">
         <a href="javascript:void(0)" (click)="loginStep = 1; formAnimation = 'slide-in'" class="secondary-link">
